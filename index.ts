@@ -20,12 +20,17 @@ const btn = document
     filter.next(newValue);
   });
 
+const callback = ([...args]) => {
+  const [list, filter] = args;
+  if (filter == 'odd') return list.filter((item) => item % 2 !== 0);
+  if (filter == 'even') return list.filter((item) => item % 2 == 0);
+  return list;
+};
+
 const obs$ = combineLatest([list, filter])
   .pipe(
-    map(([list, filter]) => {
-      if (filter == 'odd') return list.filter((item) => item % 2 !== 0);
-      if (filter == 'even') return list.filter((item) => item % 2 == 0);
-      return list;
+    map((res) => {
+      return callback(res);
     })
   )
   .subscribe((rs) => {
